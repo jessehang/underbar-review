@@ -112,18 +112,18 @@
     
     
     if (iterator !== undefined){
-      for (var i = 0; i < array.length; i ++){
+      for (var i = 0; i < array.length; i ++) {
         transformed.push(iterator(array[i]));
       }
     } else {
-      for (var i = 0; i < array.length; i ++){
+      for (var i = 0; i < array.length; i ++) {
         transformed.push(array[i]);
       }
     }
 
 
     for (var i = 0; i < transformed.length; i++) {
-      if (transformed[i] === transformed[i-1] && i !== 0){
+      if (transformed[i] === transformed[i-1] && i !== 0) {
         break;
       }
       if (_.indexOf(deDuped, transformed[i]) === -1) {
@@ -146,7 +146,7 @@
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
     var result = [];
-    var resultIterator = function(val){
+    var resultIterator = function(val) {
       result.push(iterator(val));
     };
 
@@ -195,6 +195,21 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator === undefined){
+      if (collection.length === 0){
+        return [];
+      }
+      accumulator = collection[0];
+      for (var i = 1; i < collection.length; i ++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+      return accumulator;
+    } else {
+      for (var i = 0; i < collection.length; i ++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+      return accumulator;
+    }
   };
 
   // Determine if the array or object contains a given value (using `===`).
