@@ -99,13 +99,44 @@
     // copying code in and modifying it
     var opposite = function(val){
       return !test(val);
-    }
+    };
 
     return _.filter(collection, opposite);
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var result = [];
+    var transformed = [];
+    var deDuped = [];
+    
+    
+    if (iterator !== undefined){
+      for (var i = 0; i < array.length; i ++){
+        transformed.push(iterator(array[i]));
+      }
+    } else {
+      for (var i = 0; i < array.length; i ++){
+        transformed.push(array[i]);
+      }
+    }
+
+
+    for (var i = 0; i < transformed.length; i++) {
+      if (transformed[i] === transformed[i-1] && i !== 0){
+        break;
+      }
+      if (_.indexOf(deDuped, transformed[i]) === -1) {
+        deDuped.push(transformed[i]);
+      }
+    }
+
+    for (var i = 0; i < deDuped.length; i ++) {
+      result.push(array[_.indexOf(transformed, deDuped[i])]);
+    }
+
+    return result;
+
   };
 
 
@@ -114,6 +145,15 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var result = [];
+    var resultIterator = function(val){
+      result.push(iterator(val));
+    };
+
+    _.each(collection, resultIterator);
+
+    return result;
+
   };
 
   /*
