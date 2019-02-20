@@ -90,9 +90,10 @@
       });
 
       it('fails for a collection of all-falsy values', function() {
+        expect(_.every([0, false, NaN, undefined], _.identity)).to.be.false;
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        // throw new Error('This test is missing.');
       });
 
       it('fails for a collection containing mixed falsy and truthy values', function() {
@@ -148,9 +149,10 @@
       });
 
       it('should fail for a set containing no matching values', function() {
+        expect(_.some([1,2,3,4,5], function(val) {return val > 10})).to.be.false;
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        // throw new Error('This test is missing.');
       });
 
       it('should pass for a collection containing one matching value', function() {
@@ -188,9 +190,14 @@
       });
 
       it('should override properties found on the destination', function() {
+        var destination = {key1 : 'hello world'};
+        var source = {key1: 'goodbye world'};
+        var extended = _.extend(destination, source)
+
+        expect(extended).to.eql({key1: 'goodbye world'});
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        // throw new Error('This test is missing.');
       });
 
       it('should not override properties not found in the source', function() {
@@ -266,9 +273,12 @@
       });
 
       it('should copy any property whose key is not already set on the target', function() {
+        var destination = { a: 'hello world', b: 'we rock'};
+        var source = { a: 'goodbye world', c: 'and roll'};
+        expect(_.defaults(destination, source)).to.eql({a: 'hello world', b: 'we rock', c: 'and roll'});
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        // throw new Error('This test is missing.');
       });
 
       it('should not copy a property if that key is already set on the target', function() {

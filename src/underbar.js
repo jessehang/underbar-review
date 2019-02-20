@@ -216,24 +216,55 @@
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
+    if (Array.isArray(collection)){
+      return _.reduce(collection, function(wasFound, item) {
+        if (wasFound) {
+          return true;
+        }
+        return item === target;
+      }, false);
+    } else {
+      var result = false;
+      for (var key in collection) {
+        if (collection[key] === target){
+          result = true;
+        }
       }
-      return item === target;
-    }, false);
+      return result;
+    }
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    if (iterator === undefined){
+      iterator = _.identity;
+    }
+  
+    return _.reduce(collection, function(acc, elem){
+      if (acc && iterator(elem)) {
+        acc = true;
+        return acc;
+      } else {
+        acc = false;
+        return acc;
+      }
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    var opposite = function(val) {
+      return !iterator(val);
+    };
+
+    return !_.every(collection, opposite);
   };
 
 
@@ -256,11 +287,25 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var key in arguments[i]) {
+        arguments[0][key] = arguments[i][key];
+      }
+    }
+    return arguments[0];
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (var i = 1; i < arguments.length; i ++) {
+      for (var key in arguments[i]) {
+        if (!_.contains(Object.keys(arguments[0]), key)){
+          arguments[0][key] = arguments[i][key];
+        }
+      }
+    }
+    return arguments[0];
   };
 
 
@@ -304,6 +349,13 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    var previousCalls = [];
+    // {args: ...., result: ...}
+
+    // return function() {
+    //   if (arguments)
+    // }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
