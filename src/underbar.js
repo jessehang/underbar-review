@@ -353,10 +353,26 @@
     var previousCalls = [];
     // {args: ...., result: ...}
 
-    // return function() {
-    //   if (arguments)
-    // }
+    return function() {
+      var result;
+      for (var i = 0; i < previousCalls.length; i ++) {
+        console.log(previousCalls[i].args);
+        
+        if (JSON.stringify(previousCalls[i].args) === JSON.stringify(arguments)){
+          return previousCalls[i].result;
+        }
+      }
+
+      var newCall = {};
+      result = func.apply(this, arguments);
+      newCall.args = arguments;
+      newCall.result = result;
+      previousCalls.push(newCall);
+
+      return result;
+    }
   };
+
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
